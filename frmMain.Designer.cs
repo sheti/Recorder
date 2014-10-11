@@ -162,6 +162,8 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.prbLeftChanel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "frmMain";
             this.Text = "Запись звука";
             this.Load += new System.EventHandler(this.frmMain_Load);

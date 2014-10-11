@@ -96,6 +96,7 @@ namespace recorder
                 writer = new LameMP3FileWriter(pathToFolderForRecodreFiles + "\\" + outputFilename, waveIn.WaveFormat, 128);
                 btnRecord.Enabled = false;
                 btnStop.Enabled = true;
+                btnFolderSelect.Enabled = false;
                 gpbAudioInput.Enabled = false;
                 //Начало записи
                 waveIn.StartRecording();
@@ -110,6 +111,7 @@ namespace recorder
                 waveIn.Dispose();
                 btnRecord.Enabled = true;
                 btnStop.Enabled = false;
+                btnFolderSelect.Enabled = true;
                 gpbAudioInput.Enabled = true;
                 MessageBox.Show(ex.Message);
             }
@@ -151,6 +153,7 @@ namespace recorder
             {
                 btnStop.Enabled = false;
                 btnRecord.Enabled = true;
+                btnFolderSelect.Enabled = true;
                 gpbAudioInput.Enabled = true;
                 waveIn.Dispose();
                 if (writer != null)
