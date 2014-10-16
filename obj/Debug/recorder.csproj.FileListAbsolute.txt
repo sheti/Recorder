@@ -11,3 +11,4 @@ d:\Users\Sheti\documents\visual studio 2012\Projects\recorder\recorder\bin\Debug
 d:\Users\Sheti\documents\visual studio 2012\Projects\recorder\recorder\bin\Debug\libmp3lame.64.dll
 d:\Users\Sheti\documents\visual studio 2012\Projects\recorder\recorder\bin\Debug\NAudio.Lame.dll
 d:\Users\Sheti\documents\visual studio 2012\Projects\recorder\recorder\bin\Debug\NAudio.xml
+d:\Users\Sheti\documents\visual studio 2012\Projects\recorder\recorder\bin\Debug\recorder.exe.config
