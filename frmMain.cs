@@ -61,12 +61,74 @@ namespace recorder
             }
             else
             {
-                MessageBox.Show("Не обнаружено ни одного устройства дял записи", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Не обнаружено ни одного устройства для записи", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Application.Exit();
             }
             totalRecodrTime = 0;
             sectionRecordTime = 0;
             lblTime.Text = "";
+            // Аргументы коммандной строки
+            String[] arguments = Environment.GetCommandLineArgs();
+            bool autoStart = false;
+            for(int i = 1; i < arguments.Length; i++) 
+            {
+                switch (arguments[i])
+                {
+                    case "--device":
+                        if (i + 1 < arguments.Length)
+                        {
+                            i += 1;
+                            int num = Int32.Parse(arguments[i]);
+                            if (num == 0)
+                            {
+                                rbnInputDefault.Checked = true;
+                            }
+                            else
+                            {
+                                if (num > 0 && num <= cmbWasapiDevices.Items.Count)
+                                {
+                                    rbnInputSelect.Checked = true;
+                                    cmbWasapiDevices.SelectedIndex = num - 1;
+                                }
+                            }
+                        }
+                        break;
+                    case "--cut":
+                        if (i + 1 < arguments.Length)
+                        {
+                            i += 1;
+                            int num = Int32.Parse(arguments[i]);
+                            if (num == 0)
+                            {
+                                rbnNoCut.Checked = true;
+                            }
+                            else
+                            {
+                                if (num > 0)
+                                {
+                                    rbnCut.Checked = true;
+                                    nudCutTime.Value = num;
+                                }
+                            }
+                        }
+                        break;
+                    case "--dir":
+                        if (i + 1 < arguments.Length)
+                        {
+                            i += 1;
+                            pathToFolderForRecodreFiles = arguments[i];
+                            btnRecord.Enabled = true;
+                        }
+                        break;
+                    case "--record":
+                        autoStart = true;
+                        break;
+                }
+            }
+            if (autoStart)
+            {
+                btnRecord_Click(sender, e);
+            }
         }
 
         private bool openRecordFile()
@@ -268,6 +330,16 @@ namespace recorder
             {
                 stopStatus = 1;
                 waveIn.StopRecording();
+            }
+        }
+
+        private void frmMain_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F1)
+            {
+                frmAbout frm = new frmAbout();
+                frm.ShowDialog();
+                frm.Dispose();
             }
         }
     }

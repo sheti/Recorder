@@ -42,10 +42,10 @@
             this.btnStop = new System.Windows.Forms.Button();
             this.fbdFolder = new System.Windows.Forms.FolderBrowserDialog();
             this.gpbFileCut = new System.Windows.Forms.GroupBox();
-            this.rbnNoCut = new System.Windows.Forms.RadioButton();
-            this.rbnCut = new System.Windows.Forms.RadioButton();
-            this.nudCutTime = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
+            this.nudCutTime = new System.Windows.Forms.NumericUpDown();
+            this.rbnCut = new System.Windows.Forms.RadioButton();
+            this.rbnNoCut = new System.Windows.Forms.RadioButton();
             this.label4 = new System.Windows.Forms.Label();
             this.lblTime = new System.Windows.Forms.Label();
             this.tmrRecordTime = new System.Windows.Forms.Timer(this.components);
@@ -173,27 +173,14 @@
             this.gpbFileCut.TabStop = false;
             this.gpbFileCut.Text = "Разбивка";
             // 
-            // rbnNoCut
+            // label3
             // 
-            this.rbnNoCut.AutoSize = true;
-            this.rbnNoCut.Checked = true;
-            this.rbnNoCut.Location = new System.Drawing.Point(6, 20);
-            this.rbnNoCut.Name = "rbnNoCut";
-            this.rbnNoCut.Size = new System.Drawing.Size(124, 17);
-            this.rbnNoCut.TabIndex = 0;
-            this.rbnNoCut.TabStop = true;
-            this.rbnNoCut.Text = "Не разбивать файл";
-            this.rbnNoCut.UseVisualStyleBackColor = true;
-            // 
-            // rbnCut
-            // 
-            this.rbnCut.AutoSize = true;
-            this.rbnCut.Location = new System.Drawing.Point(6, 43);
-            this.rbnCut.Name = "rbnCut";
-            this.rbnCut.Size = new System.Drawing.Size(65, 17);
-            this.rbnCut.TabIndex = 1;
-            this.rbnCut.Text = "каждые";
-            this.rbnCut.UseVisualStyleBackColor = true;
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(136, 45);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(42, 13);
+            this.label3.TabIndex = 3;
+            this.label3.Text = "секунд";
             // 
             // nudCutTime
             // 
@@ -207,14 +194,27 @@
             0,
             0});
             // 
-            // label3
+            // rbnCut
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(136, 45);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(42, 13);
-            this.label3.TabIndex = 3;
-            this.label3.Text = "секунд";
+            this.rbnCut.AutoSize = true;
+            this.rbnCut.Location = new System.Drawing.Point(6, 43);
+            this.rbnCut.Name = "rbnCut";
+            this.rbnCut.Size = new System.Drawing.Size(65, 17);
+            this.rbnCut.TabIndex = 1;
+            this.rbnCut.Text = "каждые";
+            this.rbnCut.UseVisualStyleBackColor = true;
+            // 
+            // rbnNoCut
+            // 
+            this.rbnNoCut.AutoSize = true;
+            this.rbnNoCut.Checked = true;
+            this.rbnNoCut.Location = new System.Drawing.Point(6, 20);
+            this.rbnNoCut.Name = "rbnNoCut";
+            this.rbnNoCut.Size = new System.Drawing.Size(124, 17);
+            this.rbnNoCut.TabIndex = 0;
+            this.rbnNoCut.TabStop = true;
+            this.rbnNoCut.Text = "Не разбивать файл";
+            this.rbnNoCut.UseVisualStyleBackColor = true;
             // 
             // label4
             // 
@@ -256,11 +256,13 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.prbLeftChanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.Name = "frmMain";
             this.Text = "Запись звука";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
             this.Load += new System.EventHandler(this.frmMain_Load);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.frmMain_KeyUp);
             this.gpbAudioInput.ResumeLayout(false);
             this.gpbAudioInput.PerformLayout();
             this.gpbFileCut.ResumeLayout(false);
