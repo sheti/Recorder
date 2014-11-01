@@ -185,6 +185,11 @@
             // nudCutTime
             // 
             this.nudCutTime.Location = new System.Drawing.Point(70, 43);
+            this.nudCutTime.Maximum = new decimal(new int[] {
+            86400,
+            0,
+            0,
+            0});
             this.nudCutTime.Name = "nudCutTime";
             this.nudCutTime.Size = new System.Drawing.Size(62, 20);
             this.nudCutTime.TabIndex = 2;

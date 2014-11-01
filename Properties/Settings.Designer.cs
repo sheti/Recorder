@@ -31,5 +31,41 @@ namespace recorder.Properties {
                 return ((int)(this["bitrate"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int p_cut {
+            get {
+                return ((int)(this["p_cut"]));
+            }
+            set {
+                this["p_cut"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int p_device {
+            get {
+                return ((int)(this["p_device"]));
+            }
+            set {
+                this["p_device"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string p_dir {
+            get {
+                return ((string)(this["p_dir"]));
+            }
+            set {
+                this["p_dir"] = value;
+            }
+        }
     }
 }

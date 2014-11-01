@@ -67,6 +67,30 @@ namespace recorder
             totalRecodrTime = 0;
             sectionRecordTime = 0;
             lblTime.Text = "";
+            // Параметры приложения
+            if (Properties.Settings.Default.p_device == 0)
+            {
+                rbnInputDefault.Checked = true;
+            }
+            else if (Properties.Settings.Default.p_device > 0 && Properties.Settings.Default.p_device <= cmbWasapiDevices.Items.Count)
+            {
+                rbnInputSelect.Checked = true;
+                cmbWasapiDevices.SelectedIndex = Properties.Settings.Default.p_device - 1;
+            }
+            if (Properties.Settings.Default.p_cut == 0)
+            {
+                rbnNoCut.Checked = true;
+            }
+            else if (Properties.Settings.Default.p_cut > 0)
+            {
+                rbnCut.Checked = true;
+                nudCutTime.Value = Properties.Settings.Default.p_cut;
+            }
+            if (Directory.Exists(Properties.Settings.Default.p_dir))
+            {
+                pathToFolderForRecodreFiles = Properties.Settings.Default.p_dir;
+                btnRecord.Enabled = true;
+            }
             // Аргументы коммандной строки
             String[] arguments = Environment.GetCommandLineArgs();
             bool autoStart = false;
@@ -116,8 +140,11 @@ namespace recorder
                         if (i + 1 < arguments.Length)
                         {
                             i += 1;
-                            pathToFolderForRecodreFiles = arguments[i];
-                            btnRecord.Enabled = true;
+                            if (Directory.Exists(arguments[i]))
+                            {
+                                pathToFolderForRecodreFiles = arguments[i];
+                                btnRecord.Enabled = true;
+                            }
                         }
                         break;
                     case "--record":
@@ -125,7 +152,7 @@ namespace recorder
                         break;
                 }
             }
-            if (autoStart)
+            if (autoStart && btnRecord.Enabled)
             {
                 btnRecord_Click(sender, e);
             }
@@ -151,6 +178,9 @@ namespace recorder
 
         private void btnRecord_Click(object sender, EventArgs e)
         {
+            if(!Directory.Exists(pathToFolderForRecodreFiles))
+                return;
+
             totalRecodrTime = 0;
             sectionRecordTime = 0;
             try
@@ -319,7 +349,7 @@ namespace recorder
                     waveIn.StopRecording();
                     sectionRecordTime = 0;
                 }
-                time += "-" + SecondsToMinSec(sectionRecordTime);
+                time += " [" + SecondsToMinSec(sectionRecordTime) + "]";
             }
             lblTime.Text = time;
         }
@@ -331,6 +361,28 @@ namespace recorder
                 stopStatus = 1;
                 waveIn.StopRecording();
             }
+            if (rbnInputDefault.Checked == true)
+            {
+                Properties.Settings.Default.p_device = 0;
+            }
+            if (rbnInputSelect.Checked == true && cmbWasapiDevices.Items.Count > 0)
+            {
+                Properties.Settings.Default.p_device = cmbWasapiDevices.SelectedIndex + 1;
+            }
+            if (rbnNoCut.Checked == true)
+            {
+                Properties.Settings.Default.p_cut = 0;
+
+            }
+            if (rbnCut.Checked == true && nudCutTime.Value > 0)
+            {
+                Properties.Settings.Default.p_cut = Convert.ToInt32(nudCutTime.Value);
+            }
+            if (pathToFolderForRecodreFiles.Length > 0)
+            {
+                Properties.Settings.Default.p_dir = pathToFolderForRecodreFiles;
+            }
+            Properties.Settings.Default.Save();
         }
 
         private void frmMain_KeyUp(object sender, KeyEventArgs e)
