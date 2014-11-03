@@ -49,6 +49,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.lblTime = new System.Windows.Forms.Label();
             this.tmrRecordTime = new System.Windows.Forms.Timer(this.components);
+            this.rbnCutEmpty = new System.Windows.Forms.RadioButton();
+            this.tmrWriteData = new System.Windows.Forms.Timer(this.components);
             this.gpbAudioInput.SuspendLayout();
             this.gpbFileCut.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudCutTime)).BeginInit();
@@ -130,7 +132,7 @@
             // 
             // btnFolderSelect
             // 
-            this.btnFolderSelect.Location = new System.Drawing.Point(14, 250);
+            this.btnFolderSelect.Location = new System.Drawing.Point(14, 272);
             this.btnFolderSelect.Name = "btnFolderSelect";
             this.btnFolderSelect.Size = new System.Drawing.Size(124, 23);
             this.btnFolderSelect.TabIndex = 5;
@@ -141,7 +143,7 @@
             // btnRecord
             // 
             this.btnRecord.Enabled = false;
-            this.btnRecord.Location = new System.Drawing.Point(151, 250);
+            this.btnRecord.Location = new System.Drawing.Point(150, 272);
             this.btnRecord.Name = "btnRecord";
             this.btnRecord.Size = new System.Drawing.Size(58, 23);
             this.btnRecord.TabIndex = 6;
@@ -152,7 +154,7 @@
             // btnStop
             // 
             this.btnStop.Enabled = false;
-            this.btnStop.Location = new System.Drawing.Point(215, 250);
+            this.btnStop.Location = new System.Drawing.Point(214, 272);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(58, 23);
             this.btnStop.TabIndex = 7;
@@ -162,13 +164,14 @@
             // 
             // gpbFileCut
             // 
+            this.gpbFileCut.Controls.Add(this.rbnCutEmpty);
             this.gpbFileCut.Controls.Add(this.label3);
             this.gpbFileCut.Controls.Add(this.nudCutTime);
             this.gpbFileCut.Controls.Add(this.rbnCut);
             this.gpbFileCut.Controls.Add(this.rbnNoCut);
             this.gpbFileCut.Location = new System.Drawing.Point(14, 174);
             this.gpbFileCut.Name = "gpbFileCut";
-            this.gpbFileCut.Size = new System.Drawing.Size(258, 70);
+            this.gpbFileCut.Size = new System.Drawing.Size(258, 92);
             this.gpbFileCut.TabIndex = 8;
             this.gpbFileCut.TabStop = false;
             this.gpbFileCut.Text = "Разбивка";
@@ -244,11 +247,27 @@
             this.tmrRecordTime.Interval = 1000;
             this.tmrRecordTime.Tick += new System.EventHandler(this.tmrRecordTime_Tick);
             // 
+            // rbnCutEmpty
+            // 
+            this.rbnCutEmpty.AutoSize = true;
+            this.rbnCutEmpty.Location = new System.Drawing.Point(6, 66);
+            this.rbnCutEmpty.Name = "rbnCutEmpty";
+            this.rbnCutEmpty.Size = new System.Drawing.Size(142, 17);
+            this.rbnCutEmpty.TabIndex = 4;
+            this.rbnCutEmpty.TabStop = true;
+            this.rbnCutEmpty.Text = "Не записывать тишину";
+            this.rbnCutEmpty.UseVisualStyleBackColor = true;
+            // 
+            // tmrWriteData
+            // 
+            this.tmrWriteData.Interval = 1000;
+            this.tmrWriteData.Tick += new System.EventHandler(this.tmrWriteData_Tick);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 280);
+            this.ClientSize = new System.Drawing.Size(284, 304);
             this.Controls.Add(this.lblTime);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.gpbFileCut);
@@ -300,6 +319,8 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label lblTime;
         private System.Windows.Forms.Timer tmrRecordTime;
+        private System.Windows.Forms.RadioButton rbnCutEmpty;
+        private System.Windows.Forms.Timer tmrWriteData;
     }
 }
 

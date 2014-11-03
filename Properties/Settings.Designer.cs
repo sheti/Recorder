@@ -67,5 +67,14 @@ namespace recorder.Properties {
                 this["p_dir"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("8")]
+        public int levelOfSilence {
+            get {
+                return ((int)(this["levelOfSilence"]));
+            }
+        }
     }
 }
