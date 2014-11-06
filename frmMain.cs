@@ -169,7 +169,7 @@ namespace recorder
             try
             {
                 DateTime dt = DateTime.Now;
-                string outputFilename = String.Format("{0}-{1}-{2}_{3}-{4}-{5}.mp3", dt.Day, dt.Month, dt.Year, dt.Hour, dt.Minute, dt.Second);
+                string outputFilename = String.Format("{0:00}-{1:00}-{2}_{3:00}-{4:00}-{5:00}.mp3", dt.Day, dt.Month, dt.Year, dt.Hour, dt.Minute, dt.Second);
                 //Инициализируем объект WaveFileWriter
                 //writer = new WaveFileWriter(pathToFolderForRecodreFiles+ "\\" + outputFilename, waveIn.WaveFormat);
                 writer = new LameMP3FileWriter(pathToFolderForRecodreFiles + "\\" + outputFilename, waveIn.WaveFormat, Properties.Settings.Default.bitrate);
