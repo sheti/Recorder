@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.prbLeftChanel = new System.Windows.Forms.ProgressBar();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -42,6 +43,8 @@
             this.btnStop = new System.Windows.Forms.Button();
             this.fbdFolder = new System.Windows.Forms.FolderBrowserDialog();
             this.gpbFileCut = new System.Windows.Forms.GroupBox();
+            this.cmbCutTimeVariant = new System.Windows.Forms.ComboBox();
+            this.rbnCutTime = new System.Windows.Forms.RadioButton();
             this.label3 = new System.Windows.Forms.Label();
             this.nudCutTime = new System.Windows.Forms.NumericUpDown();
             this.rbnCut = new System.Windows.Forms.RadioButton();
@@ -49,11 +52,16 @@
             this.label4 = new System.Windows.Forms.Label();
             this.lblTime = new System.Windows.Forms.Label();
             this.tmrRecordTime = new System.Windows.Forms.Timer(this.components);
-            this.rbnCutEmpty = new System.Windows.Forms.RadioButton();
             this.tmrWriteData = new System.Windows.Forms.Timer(this.components);
+            this.tmrCut = new System.Windows.Forms.Timer(this.components);
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.tsslDirPath = new System.Windows.Forms.ToolStripDropDownButton();
+            this.tsslDirPathOpenExplorer = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsslDirPathCopyToBufer = new System.Windows.Forms.ToolStripMenuItem();
             this.gpbAudioInput.SuspendLayout();
             this.gpbFileCut.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudCutTime)).BeginInit();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // prbLeftChanel
@@ -132,7 +140,7 @@
             // 
             // btnFolderSelect
             // 
-            this.btnFolderSelect.Location = new System.Drawing.Point(14, 272);
+            this.btnFolderSelect.Location = new System.Drawing.Point(14, 284);
             this.btnFolderSelect.Name = "btnFolderSelect";
             this.btnFolderSelect.Size = new System.Drawing.Size(124, 23);
             this.btnFolderSelect.TabIndex = 5;
@@ -143,7 +151,7 @@
             // btnRecord
             // 
             this.btnRecord.Enabled = false;
-            this.btnRecord.Location = new System.Drawing.Point(150, 272);
+            this.btnRecord.Location = new System.Drawing.Point(151, 284);
             this.btnRecord.Name = "btnRecord";
             this.btnRecord.Size = new System.Drawing.Size(58, 23);
             this.btnRecord.TabIndex = 6;
@@ -154,7 +162,7 @@
             // btnStop
             // 
             this.btnStop.Enabled = false;
-            this.btnStop.Location = new System.Drawing.Point(214, 272);
+            this.btnStop.Location = new System.Drawing.Point(215, 284);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(58, 23);
             this.btnStop.TabIndex = 7;
@@ -164,17 +172,43 @@
             // 
             // gpbFileCut
             // 
-            this.gpbFileCut.Controls.Add(this.rbnCutEmpty);
+            this.gpbFileCut.Controls.Add(this.cmbCutTimeVariant);
+            this.gpbFileCut.Controls.Add(this.rbnCutTime);
             this.gpbFileCut.Controls.Add(this.label3);
             this.gpbFileCut.Controls.Add(this.nudCutTime);
             this.gpbFileCut.Controls.Add(this.rbnCut);
             this.gpbFileCut.Controls.Add(this.rbnNoCut);
             this.gpbFileCut.Location = new System.Drawing.Point(14, 174);
             this.gpbFileCut.Name = "gpbFileCut";
-            this.gpbFileCut.Size = new System.Drawing.Size(258, 92);
+            this.gpbFileCut.Size = new System.Drawing.Size(258, 104);
             this.gpbFileCut.TabIndex = 8;
             this.gpbFileCut.TabStop = false;
             this.gpbFileCut.Text = "Разбивка";
+            // 
+            // cmbCutTimeVariant
+            // 
+            this.cmbCutTimeVariant.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbCutTimeVariant.FormattingEnabled = true;
+            this.cmbCutTimeVariant.Items.AddRange(new object[] {
+            "в начале часа",
+            "в середине часа",
+            "в начале суток",
+            "в полдень"});
+            this.cmbCutTimeVariant.Location = new System.Drawing.Point(93, 69);
+            this.cmbCutTimeVariant.Name = "cmbCutTimeVariant";
+            this.cmbCutTimeVariant.Size = new System.Drawing.Size(145, 21);
+            this.cmbCutTimeVariant.TabIndex = 6;
+            // 
+            // rbnCutTime
+            // 
+            this.rbnCutTime.AutoSize = true;
+            this.rbnCutTime.Location = new System.Drawing.Point(7, 70);
+            this.rbnCutTime.Name = "rbnCutTime";
+            this.rbnCutTime.Size = new System.Drawing.Size(86, 17);
+            this.rbnCutTime.TabIndex = 5;
+            this.rbnCutTime.TabStop = true;
+            this.rbnCutTime.Text = "новый файл";
+            this.rbnCutTime.UseVisualStyleBackColor = true;
             // 
             // label3
             // 
@@ -190,6 +224,11 @@
             this.nudCutTime.Location = new System.Drawing.Point(70, 43);
             this.nudCutTime.Maximum = new decimal(new int[] {
             86400,
+            0,
+            0,
+            0});
+            this.nudCutTime.Minimum = new decimal(new int[] {
+            5,
             0,
             0,
             0});
@@ -247,27 +286,59 @@
             this.tmrRecordTime.Interval = 1000;
             this.tmrRecordTime.Tick += new System.EventHandler(this.tmrRecordTime_Tick);
             // 
-            // rbnCutEmpty
-            // 
-            this.rbnCutEmpty.AutoSize = true;
-            this.rbnCutEmpty.Location = new System.Drawing.Point(6, 66);
-            this.rbnCutEmpty.Name = "rbnCutEmpty";
-            this.rbnCutEmpty.Size = new System.Drawing.Size(142, 17);
-            this.rbnCutEmpty.TabIndex = 4;
-            this.rbnCutEmpty.TabStop = true;
-            this.rbnCutEmpty.Text = "Не записывать тишину";
-            this.rbnCutEmpty.UseVisualStyleBackColor = true;
-            // 
             // tmrWriteData
             // 
             this.tmrWriteData.Interval = 1000;
             this.tmrWriteData.Tick += new System.EventHandler(this.tmrWriteData_Tick);
             // 
+            // tmrCut
+            // 
+            this.tmrCut.Tick += new System.EventHandler(this.tmrCut_Tick);
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsslDirPath});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 313);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(284, 22);
+            this.statusStrip1.SizingGrip = false;
+            this.statusStrip1.TabIndex = 11;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // tsslDirPath
+            // 
+            this.tsslDirPath.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsslDirPath.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsslDirPathCopyToBufer,
+            this.tsslDirPathOpenExplorer});
+            this.tsslDirPath.Image = ((System.Drawing.Image)(resources.GetObject("tsslDirPath.Image")));
+            this.tsslDirPath.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsslDirPath.Name = "tsslDirPath";
+            this.tsslDirPath.Size = new System.Drawing.Size(76, 20);
+            this.tsslDirPath.Text = "tsslDirPath";
+            this.tsslDirPath.Visible = false;
+            // 
+            // tsslDirPathOpenExplorer
+            // 
+            this.tsslDirPathOpenExplorer.Name = "tsslDirPathOpenExplorer";
+            this.tsslDirPathOpenExplorer.Size = new System.Drawing.Size(238, 22);
+            this.tsslDirPathOpenExplorer.Text = "Открыть папку";
+            this.tsslDirPathOpenExplorer.Click += new System.EventHandler(this.tsslDirPathOpenExplorer_Click);
+            // 
+            // tsslDirPathCopyToBufer
+            // 
+            this.tsslDirPathCopyToBufer.Name = "tsslDirPathCopyToBufer";
+            this.tsslDirPathCopyToBufer.Size = new System.Drawing.Size(238, 22);
+            this.tsslDirPathCopyToBufer.Text = "Скопировать в буфер обмена";
+            this.tsslDirPathCopyToBufer.Click += new System.EventHandler(this.tsslDirPathCopyToBufer_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 304);
+            this.ClientSize = new System.Drawing.Size(284, 335);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.lblTime);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.gpbFileCut);
@@ -292,6 +363,8 @@
             this.gpbFileCut.ResumeLayout(false);
             this.gpbFileCut.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudCutTime)).EndInit();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -319,8 +392,14 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label lblTime;
         private System.Windows.Forms.Timer tmrRecordTime;
-        private System.Windows.Forms.RadioButton rbnCutEmpty;
         private System.Windows.Forms.Timer tmrWriteData;
+        private System.Windows.Forms.ComboBox cmbCutTimeVariant;
+        private System.Windows.Forms.RadioButton rbnCutTime;
+        private System.Windows.Forms.Timer tmrCut;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripDropDownButton tsslDirPath;
+        private System.Windows.Forms.ToolStripMenuItem tsslDirPathCopyToBufer;
+        private System.Windows.Forms.ToolStripMenuItem tsslDirPathOpenExplorer;
     }
 }
 

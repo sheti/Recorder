@@ -38,11 +38,15 @@ namespace recorder
             if (fbdFolder.ShowDialog() == DialogResult.OK)
             {
                 pathToFolderForRecodreFiles = fbdFolder.SelectedPath;
+                tsslDirPath.Text = pathToFolderForRecodreFiles;
+                tsslDirPath.Visible = true;
                 btnRecord.Enabled = true;
             }
             else
             {
                 pathToFolderForRecodreFiles = "";
+                tsslDirPath.Text = "";
+                tsslDirPath.Visible = false;
                 btnRecord.Enabled = false;
                 btnStop.Enabled = false;
             }
@@ -68,6 +72,9 @@ namespace recorder
             totalRecodrTime = 0;
             sectionRecordTime = 0;
             lblTime.Text = "";
+            tsslDirPath.Text = "";
+            tsslDirPath.Visible = false;
+            cmbCutTimeVariant.SelectedIndex = 0;
             // Параметры приложения
             if (Properties.Settings.Default.p_device == 0)
             {
@@ -87,14 +94,12 @@ namespace recorder
                 rbnCut.Checked = true;
                 nudCutTime.Value = Properties.Settings.Default.p_cut;
             }
-            else if (Properties.Settings.Default.p_cut < 0)
-            {
-                rbnCutEmpty.Checked = true;
-            }
             if (Directory.Exists(Properties.Settings.Default.p_dir))
             {
                 pathToFolderForRecodreFiles = Properties.Settings.Default.p_dir;
                 btnRecord.Enabled = true;
+                tsslDirPath.Text = pathToFolderForRecodreFiles;
+                tsslDirPath.Visible = true;
             }
             // Аргументы коммандной строки
             String[] arguments = Environment.GetCommandLineArgs();
@@ -136,10 +141,6 @@ namespace recorder
                                     rbnCut.Checked = true;
                                     nudCutTime.Value = num;
                             }
-                            else if (num < 0)
-                            {
-                                rbnCutEmpty.Checked = true;
-                            }
                         }
                         break;
                     case "--dir":
@@ -150,6 +151,8 @@ namespace recorder
                             {
                                 pathToFolderForRecodreFiles = arguments[i];
                                 btnRecord.Enabled = true;
+                                tsslDirPath.Text = pathToFolderForRecodreFiles;
+                                tsslDirPath.Visible = true;
                             }
                         }
                         break;
@@ -230,6 +233,7 @@ namespace recorder
                 waveIn.StartRecording();
                 tmrRecordTime.Enabled = true;
                 tmrWriteData.Enabled = true;
+                startCutTimer();
             }
             catch (Exception ex)
             {
@@ -287,10 +291,6 @@ namespace recorder
             else
             {
                 stopStatus = 1;
-                if (rbnCutEmpty.Checked)
-                {
-                    tmrWriteData_Tick(sender, e);
-                }
             }
         }
 
@@ -319,13 +319,9 @@ namespace recorder
         {
             totalRecodrTime += 1;
             string time = SecondsToMinSec(totalRecodrTime);
-            if (rbnCut.Checked)
+            if (rbnNoCut.Checked == false)
             {
                 sectionRecordTime += 1;
-                if (sectionRecordTime >= nudCutTime.Value)
-                {
-                    stopStatus = 2;
-                }
                 time += " [" + SecondsToMinSec(sectionRecordTime) + "]";
             }
             lblTime.Text = time;
@@ -348,10 +344,6 @@ namespace recorder
             if (rbnNoCut.Checked == true)
             {
                 Properties.Settings.Default.p_cut = 0;
-            }
-            if (rbnCutEmpty.Checked == true)
-            {
-                Properties.Settings.Default.p_cut = -1;
             }
             if (rbnCut.Checked == true && nudCutTime.Value > 0)
             {
@@ -378,26 +370,7 @@ namespace recorder
         {
             tmrWriteData.Enabled = false;
             int count = wave_data.Count;
-            byte[] bufer = new byte[count];
-            byte wave_bufer;
-            int sum = 0;
-            for (int i = 0; i < count; i++) 
-            {
-                wave_bufer = wave_data.Dequeue();
-                bufer[i] = wave_bufer;
-                sum += wave_bufer;
-            }
-
-            if (rbnCutEmpty.Checked && (sum / count > Properties.Settings.Default.levelOfSilence) && (writer == null))
-            {
-                stopStatus = 2;
-            }
-            if (rbnCutEmpty.Checked && (sum / count < Properties.Settings.Default.levelOfSilence) && (writer != null)) 
-            {
-                writer.Close();
-                writer.Dispose();
-                writer = null;
-            }
+           
             // Новый файл
             if (stopStatus == 2)
             {
@@ -410,11 +383,27 @@ namespace recorder
                 if (!openRecordFile())
                     return;
                 sectionRecordTime = 0;
+                startCutTimer();
             }
             // Скидываем в файл всё что скопилось
             if(writer != null) 
             {
-                writer.Write(bufer, 0, count);
+                //writer.Write(bufer, 0, count);
+                for (int i = 0; i < count; i++)
+                {
+                    try
+                    {
+                        writer.WriteByte(wave_data.Dequeue());
+                    }
+                    catch (Exception ex)
+                    {
+                        writer.Close();
+                        writer.Dispose();
+                        writer = null;
+                        stopStatus = 1;
+                        MessageBox.Show("Не могу записать даныне в файл. Ошибка: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
             // Если запись не остановлено начинаем очередной цикл накопления данных
             if (stopStatus == 0 || stopStatus == 2)
@@ -434,12 +423,58 @@ namespace recorder
                 prbLeftChanel.Value = 0;
                 prbRightChanel.Value = 0;
                 tmrRecordTime.Enabled = false;
+                tmrCut.Enabled = false;
                 btnStop.Enabled = false;
                 btnRecord.Enabled = true;
                 btnFolderSelect.Enabled = true;
                 gpbAudioInput.Enabled = true;
                 gpbFileCut.Enabled = true;
             }
+        }
+
+        private void startCutTimer()
+        {
+            if (rbnCut.Checked)
+            {
+                tmrCut.Interval = ((int)nudCutTime.Value - 1) * 1000;
+                tmrCut.Enabled = true;
+            }
+            if (rbnCutTime.Checked)
+            {
+                DateTime now = new DateTime();
+                switch (cmbCutTimeVariant.SelectedIndex)
+                {
+                    case 0: // В начале часа
+                        tmrCut.Interval = (60 - now.Minute) * 60 * 1000 + (60 - now.Second) * 1000;
+                        break;
+                    case 1: // В середине часа
+                        tmrCut.Interval = (30 - Math.Abs(now.Minute - 30)) * 60 * 1000 + (60 - now.Second) * 1000;
+                        break;
+                    case 2: // В начале суток
+                        tmrCut.Interval = Math.Abs(now.Hour - 23) * 60 * 60 * 1000 + (60 - now.Minute) * 60 * 1000 + (60 - now.Second) * 1000;
+                        break;
+                    case 3: // В полдень
+                        tmrCut.Interval = Math.Abs(now.Hour + 12 - 23) * 60 * 60 * 1000 + (60 - now.Minute) * 60 * 1000 + (60 - now.Second) * 1000;
+                        break;
+                }
+                tmrCut.Enabled = true;
+            }
+        }
+
+        private void tmrCut_Tick(object sender, EventArgs e)
+        {
+            stopStatus = 2;
+            tmrCut.Enabled = false;
+        }
+
+        private void tsslDirPathCopyToBufer_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(pathToFolderForRecodreFiles);
+        }
+
+        private void tsslDirPathOpenExplorer_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(pathToFolderForRecodreFiles);
         }
     }
 }
