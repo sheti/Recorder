@@ -35,18 +35,6 @@ namespace recorder.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int p_cut {
-            get {
-                return ((int)(this["p_cut"]));
-            }
-            set {
-                this["p_cut"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public int p_device {
             get {
                 return ((int)(this["p_device"]));
@@ -68,12 +56,51 @@ namespace recorder.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("8")]
-        public int levelOfSilence {
+        [global::System.Configuration.DefaultSettingValueAttribute("no")]
+        public string p_cut_type {
             get {
-                return ((int)(this["levelOfSilence"]));
+                return ((string)(this["p_cut_type"]));
+            }
+            set {
+                this["p_cut_type"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int p_cut_timer {
+            get {
+                return ((int)(this["p_cut_timer"]));
+            }
+            set {
+                this["p_cut_timer"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int p_cut_clock {
+            get {
+                return ((int)(this["p_cut_clock"]));
+            }
+            set {
+                this["p_cut_clock"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int p_save {
+            get {
+                return ((int)(this["p_save"]));
+            }
+            set {
+                this["p_save"] = value;
             }
         }
     }

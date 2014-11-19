@@ -5,17 +5,23 @@
     <Setting Name="bitrate" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">128</Value>
     </Setting>
-    <Setting Name="p_cut" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
     <Setting Name="p_device" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="p_dir" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="levelOfSilence" Type="System.Int32" Scope="Application">
-      <Value Profile="(Default)">8</Value>
+    <Setting Name="p_cut_type" Type="System.String" Scope="User">
+      <Value Profile="(Default)">no</Value>
+    </Setting>
+    <Setting Name="p_cut_timer" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="p_cut_clock" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="p_save" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -85,14 +85,25 @@ namespace recorder
                 rbnInputSelect.Checked = true;
                 cmbWasapiDevices.SelectedIndex = Properties.Settings.Default.p_device - 1;
             }
-            if (Properties.Settings.Default.p_cut == 0)
+            switch (Properties.Settings.Default.p_cut_type)
             {
-                rbnNoCut.Checked = true;
+                case "timer":
+                    rbnCutTimer.Checked = true;
+                    break;
+                case "clock":
+                    rbnCutClock.Checked = true;
+                    break;
+                default:
+                    rbnNoCut.Checked = true;
+                    break;
             }
-            else if (Properties.Settings.Default.p_cut > 0)
+            if (Properties.Settings.Default.p_cut_timer >= 5)
             {
-                rbnCut.Checked = true;
-                nudCutTime.Value = Properties.Settings.Default.p_cut;
+                nudCutTime.Value = Properties.Settings.Default.p_cut_timer;
+            }
+            if (Properties.Settings.Default.p_cut_clock >= 0 && Properties.Settings.Default.p_cut_clock < cmbCutTimeVariant.Items.Count)
+            {
+                cmbCutTimeVariant.SelectedIndex = Properties.Settings.Default.p_cut_clock;
             }
             if (Directory.Exists(Properties.Settings.Default.p_dir))
             {
@@ -100,6 +111,14 @@ namespace recorder
                 btnRecord.Enabled = true;
                 tsslDirPath.Text = pathToFolderForRecodreFiles;
                 tsslDirPath.Visible = true;
+            }
+            if (Properties.Settings.Default.p_save == 0)
+            {
+                rbnSaveFiles.Checked = true;
+            }
+            if (Properties.Settings.Default.p_save == 1)
+            {
+                rbnSaveFolderFiles.Checked = true;
             }
             // Аргументы коммандной строки
             String[] arguments = Environment.GetCommandLineArgs();
@@ -127,19 +146,48 @@ namespace recorder
                             }
                         }
                         break;
-                    case "--cut":
+                    case "--save-type-file":
+                        rbnSaveFiles.Checked = true;
+                        break;
+                    case "--save-type-folder-file":
+                        rbnSaveFolderFiles.Checked = true;
+                        break;
+                    case "--cut-type":
                         if (i + 1 < arguments.Length)
                         {
                             i += 1;
-                            int num = Int32.Parse(arguments[i]);
-                            if (num == 0)
+                            switch (arguments[i])
                             {
-                                rbnNoCut.Checked = true;
-                            }
-                            else if (num > 0)
-                            {
-                                    rbnCut.Checked = true;
-                                    nudCutTime.Value = num;
+                                case "no":
+                                    rbnNoCut.Checked = true;
+                                    break;
+                                case "timer":
+                                    if (i + 1 < arguments.Length)
+                                    {
+                                        i += 1;
+                                        int num = Int32.Parse(arguments[i]);
+                                        if (num >= 5)
+                                        {
+                                            rbnCutTimer.Checked = true;
+                                            nudCutTime.Value = num;
+                                        }
+                                    }
+                                    break;
+                                case "clock":
+                                    if (i + 1 < arguments.Length)
+                                    {
+                                        i += 1;
+                                        int num = Int32.Parse(arguments[i]);
+                                        if (num > 0 && num <= cmbCutTimeVariant.Items.Count)
+                                        {
+                                            cmbCutTimeVariant.SelectedIndex = num - 1;
+                                            rbnCutClock.Checked = true;
+                                        }
+                                    }
+                                    break;
+                                default:
+                                    rbnNoCut.Checked = true;
+                                    break;
                             }
                         }
                         break;
@@ -172,7 +220,20 @@ namespace recorder
             try
             {
                 DateTime dt = DateTime.Now;
-                string outputFilename = String.Format("{0:00}-{1:00}-{2}_{3:00}-{4:00}-{5:00}.mp3", dt.Day, dt.Month, dt.Year, dt.Hour, dt.Minute, dt.Second);
+                string outputFilename = "";
+                if (rbnSaveFiles.Checked)
+                {
+                    outputFilename = String.Format("{0:00}-{1:00}-{2}_{3:00}-{4:00}-{5:00}.mp3", dt.Day, dt.Month, dt.Year, dt.Hour, dt.Minute, dt.Second);
+                }
+                if (rbnSaveFolderFiles.Checked)
+                {
+                    string directoryName = String.Format("{0}-{1:00}-{2:00}", dt.Year, dt.Month, dt.Day);
+                    if (!Directory.Exists(pathToFolderForRecodreFiles + "\\" + directoryName))
+                    {
+                        Directory.CreateDirectory(pathToFolderForRecodreFiles + "\\" + directoryName);
+                    }
+                    outputFilename = directoryName + "\\" + String.Format("{0:00}-{1:00}-{2:00}.mp3",  dt.Hour, dt.Minute, dt.Second);
+                }
                 //Инициализируем объект WaveFileWriter
                 //writer = new WaveFileWriter(pathToFolderForRecodreFiles+ "\\" + outputFilename, waveIn.WaveFormat);
                 writer = new LameMP3FileWriter(pathToFolderForRecodreFiles + "\\" + outputFilename, waveIn.WaveFormat, Properties.Settings.Default.bitrate);
@@ -211,22 +272,16 @@ namespace recorder
                 //Формат wav-файла - принимает параметры - частоту дискретизации и количество каналов(здесь mono)
                 //waveIn.WaveFormat = new WaveFormat(8000, 1);
 
-                if (rbnNoCut.Checked || rbnCut.Checked)
-                {
-                    tmrWriteData.Interval = 1000;
-                    if (!openRecordFile())
-                        return;
-                }
-                else
-                {
-                    tmrWriteData.Interval = 10000;
-                }
+                tmrWriteData.Interval = 1000;
+                if (!openRecordFile())
+                    return;
 
                 btnRecord.Enabled = false;
                 btnStop.Enabled = true;
                 btnFolderSelect.Enabled = false;
                 gpbAudioInput.Enabled = false;
                 gpbFileCut.Enabled = false;
+                gpbSave.Enabled = false;
                 //Начало записи
                 stopStatus = 0;
                 wave_data.Clear();
@@ -250,6 +305,7 @@ namespace recorder
                 tmrRecordTime.Enabled = false;
                 gpbFileCut.Enabled = true;
                 tmrRecordTime.Enabled = false;
+                gpbSave.Enabled = true;
                 lblTime.Text = "";
                 MessageBox.Show(ex.Message);
             }
@@ -343,12 +399,26 @@ namespace recorder
             }
             if (rbnNoCut.Checked == true)
             {
-                Properties.Settings.Default.p_cut = 0;
+                Properties.Settings.Default.p_cut_type = "no";
             }
-            if (rbnCut.Checked == true && nudCutTime.Value > 0)
+            if (rbnCutTimer.Checked == true)
             {
-                Properties.Settings.Default.p_cut = Convert.ToInt32(nudCutTime.Value);
+                Properties.Settings.Default.p_cut_type = "timer";
             }
+            if (rbnCutClock.Checked == true)
+            {
+                Properties.Settings.Default.p_cut_type = "clock";
+            }
+            if (rbnSaveFiles.Checked)
+            {
+                Properties.Settings.Default.p_save = 0;
+            }
+            if (rbnSaveFolderFiles.Checked)
+            {
+                Properties.Settings.Default.p_save = 1;
+            }
+            Properties.Settings.Default.p_cut_timer = (int)nudCutTime.Value;
+            Properties.Settings.Default.p_cut_clock = cmbCutTimeVariant.SelectedIndex;
             if (pathToFolderForRecodreFiles.Length > 0)
             {
                 Properties.Settings.Default.p_dir = pathToFolderForRecodreFiles;
@@ -429,19 +499,20 @@ namespace recorder
                 btnFolderSelect.Enabled = true;
                 gpbAudioInput.Enabled = true;
                 gpbFileCut.Enabled = true;
+                gpbSave.Enabled = true;
             }
         }
 
         private void startCutTimer()
         {
-            if (rbnCut.Checked)
+            if (rbnCutTimer.Checked)
             {
                 tmrCut.Interval = ((int)nudCutTime.Value - 1) * 1000;
                 tmrCut.Enabled = true;
             }
-            if (rbnCutTime.Checked)
+            if (rbnCutClock.Checked)
             {
-                DateTime now = new DateTime();
+                DateTime now = DateTime.Now;
                 switch (cmbCutTimeVariant.SelectedIndex)
                 {
                     case 0: // В начале часа

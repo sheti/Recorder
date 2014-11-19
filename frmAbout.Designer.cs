@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAbout));
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.label1 = new System.Windows.Forms.Label();
             this.txtInfo = new System.Windows.Forms.TextBox();
@@ -46,7 +47,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(87, 9);
+            this.label1.Location = new System.Drawing.Point(184, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(102, 13);
             this.label1.TabIndex = 1;
@@ -59,14 +60,15 @@
             this.txtInfo.Name = "txtInfo";
             this.txtInfo.ReadOnly = true;
             this.txtInfo.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtInfo.Size = new System.Drawing.Size(260, 100);
+            this.txtInfo.Size = new System.Drawing.Size(460, 142);
             this.txtInfo.TabIndex = 2;
+            this.txtInfo.Text = resources.GetString("txtInfo.Text");
             // 
             // frmAbout
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 171);
+            this.ClientSize = new System.Drawing.Size(484, 213);
             this.Controls.Add(this.txtInfo);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.linkLabel1);
@@ -74,7 +76,6 @@
             this.MaximizeBox = false;
             this.Name = "frmAbout";
             this.Text = "О программе...";
-            this.Load += new System.EventHandler(this.frmAbout_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -117,4 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="txtInfo.Text" xml:space="preserve">
+    <value>recorder.exe [параметры запуска]
+  --device номер_устройства - устройство источник звука
+  --dir путь_до_папки_сохранения - папка куда сохраняются записи
+  --cut-type [no|timer|clock] [время/вариант] - тип нарезки файла и его параметры
+  --record - запись после запуска
+  --save-type-file - только файлы
+  --save-type-folder-file - папки по датам, файлы по времени</value>
+  </data>
 </root>
