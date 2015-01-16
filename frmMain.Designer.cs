@@ -52,7 +52,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.lblTime = new System.Windows.Forms.Label();
             this.tmrRecordTime = new System.Windows.Forms.Timer(this.components);
-            this.tmrWriteData = new System.Windows.Forms.Timer(this.components);
             this.tmrCut = new System.Windows.Forms.Timer(this.components);
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tsslDirPath = new System.Windows.Forms.ToolStripDropDownButton();
@@ -292,11 +291,6 @@
             this.tmrRecordTime.Interval = 1000;
             this.tmrRecordTime.Tick += new System.EventHandler(this.tmrRecordTime_Tick);
             // 
-            // tmrWriteData
-            // 
-            this.tmrWriteData.Interval = 1000;
-            this.tmrWriteData.Tick += new System.EventHandler(this.tmrWriteData_Tick);
-            // 
             // tmrCut
             // 
             this.tmrCut.Tick += new System.EventHandler(this.tmrCut_Tick);
@@ -460,7 +454,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label lblTime;
         private System.Windows.Forms.Timer tmrRecordTime;
-        private System.Windows.Forms.Timer tmrWriteData;
         private System.Windows.Forms.ComboBox cmbCutTimeVariant;
         private System.Windows.Forms.RadioButton rbnCutClock;
         private System.Windows.Forms.Timer tmrCut;

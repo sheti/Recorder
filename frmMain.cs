@@ -25,7 +25,6 @@ namespace recorder
         MMDevice device, defaultDevice;
         int totalRecodrTime = 0, sectionRecordTime = 0;
         int stopStatus = 0; // 0 - не остановлен, 1 - остановлен, 2 - по таймеру
-        Queue<byte> wave_data = new Queue<byte>();
 
         public frmMain()
         {
@@ -283,7 +282,6 @@ namespace recorder
                 //Формат wav-файла - принимает параметры - частоту дискретизации и количество каналов(здесь mono)
                 //waveIn.WaveFormat = new WaveFormat(8000, 1);
 
-                tmrWriteData.Interval = 1000;
                 if (!openRecordFile())
                     return;
 
@@ -295,10 +293,8 @@ namespace recorder
                 gpbSave.Enabled = false;
                 //Начало записи
                 stopStatus = 0;
-                wave_data.Clear();
                 waveIn.StartRecording();
                 tmrRecordTime.Enabled = true;
-                tmrWriteData.Enabled = true;
                 startCutTimer();
             }
             catch (Exception ex)
@@ -345,10 +341,6 @@ namespace recorder
             }
             else
             {
-                //writer.Write(e.Buffer, 0, e.BytesRecorded);
-                for (int i = 0; i < e.BytesRecorded; i++)
-                    wave_data.Enqueue(e.Buffer[i]);
-
                 if (waveIn.WaveFormat.Channels == 2)
                 {
                     prbLeftChanel.Value = (int)(Math.Round(device.AudioMeterInformation.PeakValues[0] * 100));
@@ -358,6 +350,45 @@ namespace recorder
                 {
                     prbLeftChanel.Value = (int)(Math.Round(device.AudioMeterInformation.MasterPeakValue * 100));
                     prbRightChanel.Value = prbLeftChanel.Value;
+                }
+
+                // Новый файл
+                if (stopStatus == 2)
+                {
+                    if (writer != null)
+                    {
+                        CloseWriter();
+                    }
+
+                    if (!openRecordFile())
+                        return;
+                    sectionRecordTime = 0;
+                    startCutTimer();
+                }
+                
+                try
+                {
+                    switch (cmbTypeFile.SelectedIndex)
+                    {
+                        case 0:
+                            ((LameMP3FileWriter)writer).Write(e.Buffer, 0, e.BytesRecorded);
+                            break;
+                        case 1:
+                            ((WaveFileWriter)writer).Write(e.Buffer, 0, e.BytesRecorded);
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    waveIn.StopRecording();
+                    CloseWriter();
+                    writer = null;
+                    MessageBox.Show("Не могу записать даныне в файл. Ошибка: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+                if (stopStatus == 2)
+                {
+                    stopStatus = 0;
                 }
             }
         }
@@ -371,7 +402,18 @@ namespace recorder
             }
             else
             {
-                stopStatus = 1;
+                waveIn.Dispose();
+                CloseWriter();
+                prbLeftChanel.Value = 0;
+                prbRightChanel.Value = 0;
+                tmrRecordTime.Enabled = false;
+                tmrCut.Enabled = false;
+                btnStop.Enabled = false;
+                btnRecord.Enabled = true;
+                btnFolderSelect.Enabled = true;
+                gpbAudioInput.Enabled = true;
+                gpbFileCut.Enabled = true;
+                gpbSave.Enabled = true;
             }
         }
 
@@ -458,78 +500,6 @@ namespace recorder
                 frmAbout frm = new frmAbout();
                 frm.ShowDialog();
                 frm.Dispose();
-            }
-        }
-
-        private void tmrWriteData_Tick(object sender, EventArgs e)
-        {
-            tmrWriteData.Enabled = false;
-            int count = wave_data.Count;
-           
-            // Новый файл
-            if (stopStatus == 2)
-            {
-                if (writer != null)
-                {
-                    CloseWriter();
-                }
-
-                if (!openRecordFile())
-                    return;
-                sectionRecordTime = 0;
-                startCutTimer();
-            }
-            // Скидываем в файл всё что скопилось
-            if(writer != null) 
-            {
-                for (int i = 0; i < count; i++)
-                {
-                    try
-                    {
-                        switch (cmbTypeFile.SelectedIndex)
-                        {
-                            case 0:
-                                ((LameMP3FileWriter)writer).WriteByte(wave_data.Dequeue());
-                                break;
-                            case 1:
-                                ((WaveFileWriter)writer).WriteByte(wave_data.Dequeue());
-                                break;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        CloseWriter();
-                        writer = null;
-                        stopStatus = 1;
-                        MessageBox.Show("Не могу записать даныне в файл. Ошибка: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-            }
-            // Если запись не остановлено начинаем очередной цикл накопления данных
-            if (stopStatus == 0 || stopStatus == 2)
-            {
-                tmrWriteData.Enabled = true;
-            }
-            
-            if (stopStatus == 2)
-            {
-                stopStatus = 0;
-            }
-            // Полная остановка
-            if (stopStatus == 1)
-            {
-                waveIn.Dispose();
-                CloseWriter();
-                prbLeftChanel.Value = 0;
-                prbRightChanel.Value = 0;
-                tmrRecordTime.Enabled = false;
-                tmrCut.Enabled = false;
-                btnStop.Enabled = false;
-                btnRecord.Enabled = true;
-                btnFolderSelect.Enabled = true;
-                gpbAudioInput.Enabled = true;
-                gpbFileCut.Enabled = true;
-                gpbSave.Enabled = true;
             }
         }
 
