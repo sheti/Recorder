@@ -59,8 +59,10 @@
             this.tsslDirPathCopyToBufer = new System.Windows.Forms.ToolStripMenuItem();
             this.tsslDirPathOpenExplorer = new System.Windows.Forms.ToolStripMenuItem();
             this.gpbSave = new System.Windows.Forms.GroupBox();
-            this.rbnSaveFiles = new System.Windows.Forms.RadioButton();
             this.rbnSaveFolderFiles = new System.Windows.Forms.RadioButton();
+            this.rbnSaveFiles = new System.Windows.Forms.RadioButton();
+            this.label5 = new System.Windows.Forms.Label();
+            this.cmbTypeFile = new System.Windows.Forms.ComboBox();
             this.gpbAudioInput.SuspendLayout();
             this.gpbFileCut.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudCutTime)).BeginInit();
@@ -144,7 +146,7 @@
             // 
             // btnFolderSelect
             // 
-            this.btnFolderSelect.Location = new System.Drawing.Point(15, 362);
+            this.btnFolderSelect.Location = new System.Drawing.Point(14, 387);
             this.btnFolderSelect.Name = "btnFolderSelect";
             this.btnFolderSelect.Size = new System.Drawing.Size(124, 23);
             this.btnFolderSelect.TabIndex = 5;
@@ -155,7 +157,7 @@
             // btnRecord
             // 
             this.btnRecord.Enabled = false;
-            this.btnRecord.Location = new System.Drawing.Point(154, 362);
+            this.btnRecord.Location = new System.Drawing.Point(151, 387);
             this.btnRecord.Name = "btnRecord";
             this.btnRecord.Size = new System.Drawing.Size(58, 23);
             this.btnRecord.TabIndex = 6;
@@ -166,7 +168,7 @@
             // btnStop
             // 
             this.btnStop.Enabled = false;
-            this.btnStop.Location = new System.Drawing.Point(215, 362);
+            this.btnStop.Location = new System.Drawing.Point(215, 387);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(58, 23);
             this.btnStop.TabIndex = 7;
@@ -303,7 +305,7 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsslDirPath});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 390);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 416);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(284, 22);
             this.statusStrip1.SizingGrip = false;
@@ -350,6 +352,17 @@
             this.gpbSave.TabStop = false;
             this.gpbSave.Text = "Сохранение";
             // 
+            // rbnSaveFolderFiles
+            // 
+            this.rbnSaveFolderFiles.AutoSize = true;
+            this.rbnSaveFolderFiles.Location = new System.Drawing.Point(7, 44);
+            this.rbnSaveFolderFiles.Name = "rbnSaveFolderFiles";
+            this.rbnSaveFolderFiles.Size = new System.Drawing.Size(164, 17);
+            this.rbnSaveFolderFiles.TabIndex = 1;
+            this.rbnSaveFolderFiles.TabStop = true;
+            this.rbnSaveFolderFiles.Text = "Сохранять по дням в папки";
+            this.rbnSaveFolderFiles.UseVisualStyleBackColor = true;
+            // 
             // rbnSaveFiles
             // 
             this.rbnSaveFiles.AutoSize = true;
@@ -362,22 +375,34 @@
             this.rbnSaveFiles.Text = "Сохранять в файлы";
             this.rbnSaveFiles.UseVisualStyleBackColor = true;
             // 
-            // rbnSaveFolderFiles
+            // label5
             // 
-            this.rbnSaveFolderFiles.AutoSize = true;
-            this.rbnSaveFolderFiles.Location = new System.Drawing.Point(7, 44);
-            this.rbnSaveFolderFiles.Name = "rbnSaveFolderFiles";
-            this.rbnSaveFolderFiles.Size = new System.Drawing.Size(164, 17);
-            this.rbnSaveFolderFiles.TabIndex = 1;
-            this.rbnSaveFolderFiles.TabStop = true;
-            this.rbnSaveFolderFiles.Text = "Сохранять по дням в папки";
-            this.rbnSaveFolderFiles.UseVisualStyleBackColor = true;
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(15, 363);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(61, 13);
+            this.label5.TabIndex = 13;
+            this.label5.Text = "Тип файла";
+            // 
+            // cmbTypeFile
+            // 
+            this.cmbTypeFile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTypeFile.FormattingEnabled = true;
+            this.cmbTypeFile.Items.AddRange(new object[] {
+            "MP3",
+            "WAV"});
+            this.cmbTypeFile.Location = new System.Drawing.Point(82, 360);
+            this.cmbTypeFile.Name = "cmbTypeFile";
+            this.cmbTypeFile.Size = new System.Drawing.Size(191, 21);
+            this.cmbTypeFile.TabIndex = 14;
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 412);
+            this.ClientSize = new System.Drawing.Size(284, 438);
+            this.Controls.Add(this.cmbTypeFile);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.gpbSave);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.lblTime);
@@ -446,6 +471,8 @@
         private System.Windows.Forms.GroupBox gpbSave;
         private System.Windows.Forms.RadioButton rbnSaveFolderFiles;
         private System.Windows.Forms.RadioButton rbnSaveFiles;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ComboBox cmbTypeFile;
     }
 }
 

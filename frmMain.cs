@@ -20,8 +20,7 @@ namespace recorder
         // WaveIn - поток для записи
         WasapiCapture waveIn;
         //Класс для записи в файл
-        //WaveFileWriter writer;
-        LameMP3FileWriter writer;
+        object writer;
         MMDeviceCollection devices;
         MMDevice device, defaultDevice;
         int totalRecodrTime = 0, sectionRecordTime = 0;
@@ -75,6 +74,7 @@ namespace recorder
             tsslDirPath.Text = "";
             tsslDirPath.Visible = false;
             cmbCutTimeVariant.SelectedIndex = 0;
+            cmbTypeFile.SelectedIndex = 0;
             // Параметры приложения
             if (Properties.Settings.Default.p_device == 0)
             {
@@ -223,7 +223,7 @@ namespace recorder
                 string outputFilename = "";
                 if (rbnSaveFiles.Checked)
                 {
-                    outputFilename = String.Format("{0:00}-{1:00}-{2}_{3:00}-{4:00}-{5:00}.mp3", dt.Day, dt.Month, dt.Year, dt.Hour, dt.Minute, dt.Second);
+                    outputFilename = String.Format("{0}-{1:00}-{2:00}_{3:00}-{4:00}-{5:00}.", dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, dt.Second);
                 }
                 if (rbnSaveFolderFiles.Checked)
                 {
@@ -232,11 +232,22 @@ namespace recorder
                     {
                         Directory.CreateDirectory(pathToFolderForRecodreFiles + "\\" + directoryName);
                     }
-                    outputFilename = directoryName + "\\" + String.Format("{0:00}-{1:00}-{2:00}.mp3",  dt.Hour, dt.Minute, dt.Second);
+                    outputFilename = directoryName + "\\" + String.Format("{0:00}-{1:00}-{2:00}.",  dt.Hour, dt.Minute, dt.Second);
                 }
-                //Инициализируем объект WaveFileWriter
-                //writer = new WaveFileWriter(pathToFolderForRecodreFiles+ "\\" + outputFilename, waveIn.WaveFormat);
-                writer = new LameMP3FileWriter(pathToFolderForRecodreFiles + "\\" + outputFilename, waveIn.WaveFormat, Properties.Settings.Default.bitrate);
+                switch (cmbTypeFile.SelectedIndex)
+                {
+                    case 0:
+                        outputFilename += "mp3";
+                        writer = new LameMP3FileWriter(pathToFolderForRecodreFiles + "\\" + outputFilename, waveIn.WaveFormat, Properties.Settings.Default.bitrate);
+                        break;
+                    case 1:
+                        outputFilename += "wav";
+                        //Инициализируем объект WaveFileWriter
+                        writer = new WaveFileWriter(pathToFolderForRecodreFiles+ "\\" + outputFilename, waveIn.WaveFormat);
+                        break;
+                }
+                
+                
             }
             catch (Exception ex)
             {
@@ -294,8 +305,7 @@ namespace recorder
             {
                 if (writer != null)
                 {
-                    writer.Close();
-                    writer.Dispose();
+                    CloseWriter();
                 }
                 waveIn.Dispose();
                 btnRecord.Enabled = true;
@@ -308,6 +318,21 @@ namespace recorder
                 gpbSave.Enabled = true;
                 lblTime.Text = "";
                 MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void CloseWriter()
+        {
+            switch (cmbTypeFile.SelectedIndex)
+            {
+                case 0:
+                    ((LameMP3FileWriter)writer).Close();
+                    ((LameMP3FileWriter)writer).Dispose();
+                    break;
+                case 1:
+                    ((WaveFileWriter)writer).Close();
+                    ((WaveFileWriter)writer).Dispose();
+                    break;
             }
         }
 
@@ -446,8 +471,7 @@ namespace recorder
             {
                 if (writer != null)
                 {
-                    writer.Close();
-                    writer.Dispose();
+                    CloseWriter();
                 }
 
                 if (!openRecordFile())
@@ -458,17 +482,23 @@ namespace recorder
             // Скидываем в файл всё что скопилось
             if(writer != null) 
             {
-                //writer.Write(bufer, 0, count);
                 for (int i = 0; i < count; i++)
                 {
                     try
                     {
-                        writer.WriteByte(wave_data.Dequeue());
+                        switch (cmbTypeFile.SelectedIndex)
+                        {
+                            case 0:
+                                ((LameMP3FileWriter)writer).WriteByte(wave_data.Dequeue());
+                                break;
+                            case 1:
+                                ((WaveFileWriter)writer).WriteByte(wave_data.Dequeue());
+                                break;
+                        }
                     }
                     catch (Exception ex)
                     {
-                        writer.Close();
-                        writer.Dispose();
+                        CloseWriter();
                         writer = null;
                         stopStatus = 1;
                         MessageBox.Show("Не могу записать даныне в файл. Ошибка: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -489,7 +519,7 @@ namespace recorder
             if (stopStatus == 1)
             {
                 waveIn.Dispose();
-                writer.Close();
+                CloseWriter();
                 prbLeftChanel.Value = 0;
                 prbRightChanel.Value = 0;
                 tmrRecordTime.Enabled = false;
