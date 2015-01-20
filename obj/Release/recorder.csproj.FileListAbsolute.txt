@@ -1,0 +1,14 @@
+d:\Users\Sheti\documents\visual studio 2012\Projects\recorder\recorder\bin\Release\recorder.exe.config
+d:\Users\Sheti\documents\visual studio 2012\Projects\recorder\recorder\bin\Release\libmp3lame.32.dll
+d:\Users\Sheti\documents\visual studio 2012\Projects\recorder\recorder\bin\Release\libmp3lame.64.dll
+d:\Users\Sheti\documents\visual studio 2012\Projects\recorder\recorder\bin\Release\recorder.exe
+d:\Users\Sheti\documents\visual studio 2012\Projects\recorder\recorder\bin\Release\recorder.pdb
+d:\Users\Sheti\documents\visual studio 2012\Projects\recorder\recorder\bin\Release\NAudio.dll
+d:\Users\Sheti\documents\visual studio 2012\Projects\recorder\recorder\bin\Release\NAudio.Lame.dll
+d:\Users\Sheti\documents\visual studio 2012\Projects\recorder\recorder\bin\Release\NAudio.xml
+d:\Users\Sheti\documents\visual studio 2012\Projects\recorder\recorder\obj\Release\recorder.frmAbout.resources
+d:\Users\Sheti\documents\visual studio 2012\Projects\recorder\recorder\obj\Release\recorder.frmMain.resources
+d:\Users\Sheti\documents\visual studio 2012\Projects\recorder\recorder\obj\Release\recorder.Properties.Resources.resources
+d:\Users\Sheti\documents\visual studio 2012\Projects\recorder\recorder\obj\Release\recorder.csproj.GenerateResource.Cache
+d:\Users\Sheti\documents\visual studio 2012\Projects\recorder\recorder\obj\Release\recorder.exe
+d:\Users\Sheti\documents\visual studio 2012\Projects\recorder\recorder\obj\Release\recorder.pdb

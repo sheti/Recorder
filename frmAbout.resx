@@ -124,6 +124,7 @@
   --cut-type [no|timer|clock] [время/вариант] - тип нарезки файла и его параметры
   --record - запись после запуска
   --save-type-file - только файлы
-  --save-type-folder-file - папки по датам, файлы по времени</value>
+  --save-type-folder-file - папки по датам, файлы по времени
+  --title тест - заменяет заголовок программы</value>
   </data>
 </root>

@@ -1,7 +1,6 @@
 d:\users\sheti\documents\visual studio 2012\Projects\recorder\recorder\bin\Debug\recorder.exe
 d:\users\sheti\documents\visual studio 2012\Projects\recorder\recorder\bin\Debug\recorder.pdb
 d:\users\sheti\documents\visual studio 2012\Projects\recorder\recorder\bin\Debug\NAudio.dll
-d:\users\sheti\documents\visual studio 2012\Projects\recorder\recorder\obj\Debug\recorder.csprojResolveAssemblyReference.cache
 d:\users\sheti\documents\visual studio 2012\Projects\recorder\recorder\obj\Debug\recorder.frmMain.resources
 d:\users\sheti\documents\visual studio 2012\Projects\recorder\recorder\obj\Debug\recorder.Properties.Resources.resources
 d:\users\sheti\documents\visual studio 2012\Projects\recorder\recorder\obj\Debug\recorder.csproj.GenerateResource.Cache

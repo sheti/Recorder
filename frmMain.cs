@@ -206,6 +206,13 @@ namespace recorder
                     case "--record":
                         autoStart = true;
                         break;
+                    case "--title":
+                        if (i + 1 < arguments.Length)
+                        {
+                            i += 1;
+                            this.Text = arguments[i];
+                        }
+                        break;
                 }
             }
             if (autoStart && btnRecord.Enabled)
