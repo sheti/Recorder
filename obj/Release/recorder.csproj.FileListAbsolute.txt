@@ -12,3 +12,4 @@ d:\Users\Sheti\documents\visual studio 2012\Projects\recorder\recorder\obj\Relea
 d:\Users\Sheti\documents\visual studio 2012\Projects\recorder\recorder\obj\Release\recorder.csproj.GenerateResource.Cache
 d:\Users\Sheti\documents\visual studio 2012\Projects\recorder\recorder\obj\Release\recorder.exe
 d:\Users\Sheti\documents\visual studio 2012\Projects\recorder\recorder\obj\Release\recorder.pdb
+d:\Users\Sheti\documents\visual studio 2012\Projects\recorder\recorder\obj\Release\recorder.csprojResolveAssemblyReference.cache

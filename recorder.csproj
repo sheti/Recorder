@@ -31,6 +31,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>1422660762_8848.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="NAudio, Version=1.7.1.17, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -96,6 +99,7 @@
   <ItemGroup>
     <None Include="1415536258_Copy.png" />
     <None Include="1415536237_folder.png" />
+    <Content Include="1422660762_8848.ico" />
     <Content Include="libmp3lame.32.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

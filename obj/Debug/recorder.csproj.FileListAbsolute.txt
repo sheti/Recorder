@@ -12,3 +12,4 @@ d:\Users\Sheti\documents\visual studio 2012\Projects\recorder\recorder\bin\Debug
 d:\Users\Sheti\documents\visual studio 2012\Projects\recorder\recorder\bin\Debug\NAudio.xml
 d:\Users\Sheti\documents\visual studio 2012\Projects\recorder\recorder\bin\Debug\recorder.exe.config
 d:\Users\Sheti\documents\visual studio 2012\Projects\recorder\recorder\obj\Debug\recorder.frmAbout.resources
+d:\Users\Sheti\documents\visual studio 2012\Projects\recorder\recorder\obj\Debug\recorder.csprojResolveAssemblyReference.cache

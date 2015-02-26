@@ -523,16 +523,22 @@ namespace recorder
                 switch (cmbCutTimeVariant.SelectedIndex)
                 {
                     case 0: // В начале часа
-                        tmrCut.Interval = (60 - now.Minute) * 60 * 1000 + (60 - now.Second) * 1000;
+                        tmrCut.Interval = (59 - now.Minute) * 60 * 1000 + (60 - now.Second) * 1000;
                         break;
                     case 1: // В середине часа
-                        tmrCut.Interval = (30 - Math.Abs(now.Minute - 30)) * 60 * 1000 + (60 - now.Second) * 1000;
+                        if (now.Minute >= 30)
+                            tmrCut.Interval = (59 - now.Minute) * 60 * 1000 + (60 - now.Second) * 1000;
+                        else
+                            tmrCut.Interval = (29 - now.Minute) * 60 * 1000 + (60 - now.Second) * 1000;
                         break;
                     case 2: // В начале суток
-                        tmrCut.Interval = Math.Abs(now.Hour - 23) * 60 * 60 * 1000 + (60 - now.Minute) * 60 * 1000 + (60 - now.Second) * 1000;
+                        tmrCut.Interval = Math.Abs(now.Hour - 23) * 60 * 60 * 1000 + (59 - now.Minute) * 60 * 1000 + (60 - now.Second) * 1000;
                         break;
                     case 3: // В полдень
-                        tmrCut.Interval = Math.Abs(now.Hour + 12 - 23) * 60 * 60 * 1000 + (60 - now.Minute) * 60 * 1000 + (60 - now.Second) * 1000;
+                        if (now.Hour >= 12)
+                            tmrCut.Interval = (24 - now.Hour) * 60 * 60 * 1000 + (59 - now.Minute) * 60 * 1000 + (60 - now.Second) * 1000;
+                        else
+                            tmrCut.Interval = (12 - now.Hour) * 60 * 60 * 1000 + (59 - now.Minute) * 60 * 1000 + (60 - now.Second) * 1000;
                         break;
                 }
                 tmrCut.Enabled = true;
